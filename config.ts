@@ -1,14 +1,19 @@
-// ---------------------------------------------
-// CHANGE 1: Import the Groq provider
-// ---------------------------------------------
-import { groq } from "@ai-sdk/groq"; 
+import { createGroq } from "@ai-sdk/groq";
 import { wrapLanguageModel, extractReasoningMiddleware } from "ai";
 
-// ---------------------------------------------
-// CHANGE 2: Use the Groq function and a Groq model name
-// (mixtral-8x7b-32768 is a popular, fast Groq model)
-// ---------------------------------------------
-export const MODEL = groq('mixtral-8x7b-32768');
+// -------------------------------------------------------------------------
+// 1. Configure the Groq Provider with the Correct Base URL
+//    This fixes the error by directing the network traffic to Groq's endpoint.
+//    It will automatically use the GROQ_API_KEY environment variable.
+// -------------------------------------------------------------------------
+const groqProvider = createGroq({
+    // Explicitly set the baseURL to Groq's OpenAI-compatible endpoint.
+    baseURL: "https://api.groq.com/openai/v1", 
+});
+
+// 2. Define the Model using the configured Groq Provider
+//    Using a Groq model like Mixtral 8x7B (fastest on Groq)
+export const MODEL = groqProvider('mixtral-8x7b-32768');
 
 function getDateAndTime(): string {
     const now = new Date();
@@ -31,4 +36,26 @@ export const DATE_AND_TIME = getDateAndTime();
 export const AI_NAME = "MyAI3";
 export const OWNER_NAME = "Mihir Parekh";
 
-// ... (Rest of the file remains the same)
+export const WELCOME_MESSAGE = `Hello! I'm ${AI_NAME}, an AI assistant created by ${OWNER_NAME}.`
+
+export const CLEAR_CHAT_TEXT = "New";
+
+// --- Moderation Messages (Copied from your original file) ---
+export const MODERATION_DENIAL_MESSAGE_SEXUAL = "I can't discuss explicit sexual content. Please ask something else.";
+export const MODERATION_DENIAL_MESSAGE_SEXUAL_MINORS = "I can't discuss content involving minors in a sexual context. Please ask something else.";
+export const MODERATION_DENIAL_MESSAGE_HARASSMENT = "I can't engage with harassing content. Please be respectful.";
+export const MODERATION_DENIAL_MESSAGE_HARASSMENT_THREATENING = "I can't engage with threatening or harassing content. Please be respectful.";
+export const MODERATION_DENIAL_MESSAGE_HATE = "I can't engage with hateful content. Please be respectful.";
+export const MODERATION_DENIAL_MESSAGE_HATE_THREATENING = "I can't engage with threatening hate speech. Please be respectful.";
+export const MODERATION_DENIAL_MESSAGE_ILLICIT = "I can't discuss illegal activities. Please ask something else.";
+export const MODERATION_DENIAL_MESSAGE_ILLICIT_VIOLENT = "I can't discuss violent illegal activities. Please ask something else.";
+export const MODERATION_DENIAL_MESSAGE_SELF_HARM = "I can't discuss self-harm. If you're struggling, please reach out to a mental health professional or crisis helpline.";
+export const MODERATION_DENIAL_MESSAGE_SELF_HARM_INTENT = "I can't discuss self-harm intentions. If you're struggling, please reach out to a mental health professional or crisis helpline.";
+export const MODERATION_DENIAL_MESSAGE_SELF_HARM_INSTRUCTIONS = "I can't provide instructions related to self-harm. If you're struggling, please reach out to a mental health professional or crisis helpline.";
+export const MODERATION_DENIAL_MESSAGE_VIOLENCE = "I can't discuss violent content. Please ask something else.";
+export const MODERATION_DENIAL_MESSAGE_VIOLENCE_GRAPHIC = "I can't discuss graphic violent content. Please ask something else.";
+export const MODERATION_DENIAL_MESSAGE_DEFAULT = "Your message violates our guidelines. I can't answer that.";
+// --- End Moderation Messages ---
+
+export const PINECONE_TOP_K = 40;
+export const PINECONE_INDEX_NAME = "my-ai";
